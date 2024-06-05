@@ -1,0 +1,18 @@
+import java.util.Scanner;
+
+public class Check {public class SplitExample {
+    public static void main(String[] args) {
+        String expression = "10+5+3";
+        String[] parts = expression.split("[+/]");
+        
+        System.out.println("Original expression: " + expression);
+        System.out.println("Parts after splitting:");
+        for (String part : parts) {
+            System.out.println(part);
+        }
+    }
+}
+}
+
+
+

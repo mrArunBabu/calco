@@ -1,0 +1,27 @@
+import javax.swing.JFrame;
+
+
+public class Calculator {
+	// Create method calculator
+	public Calculator() {
+		JFrame jf = new JFrame("Calculator");
+		
+		// set size of the window and the location on screen
+		jf.setLayout(null);
+		jf.setSize(500, 600);
+		jf.setLocation(200, 200);
+		
+		
+		//Make it visible
+		jf.setVisible(true);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+ //Create the Main  class to call the calculator constructor 
+	
+	public static void main(String[]arg) {
+		 
+		new Calculator();
+	}
+		
+	}

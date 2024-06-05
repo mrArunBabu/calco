@@ -1,0 +1,94 @@
+import javax.swing.SwingConstants;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+
+public class Calculator implements ActionListener {
+	
+	JFrame jf;
+	// Create method calculator
+	public Calculator() {
+		jf = new JFrame("Calculator");
+		
+		// set size of the window and the location on screen
+		jf.setLayout(null);
+		jf.setSize(500, 600);
+		jf.setLocation(200, 100);
+		
+		
+		//Make it visible
+		jf.setVisible(true);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//Create display
+		
+		JLabel displayLabel = new JLabel("Hello");
+		
+		// Add dimensions and location on screen to label 
+		displayLabel.setBounds(30, 50, 500, 30);
+		
+		//Choose display background color
+		displayLabel.setBackground(Color.gray);
+		
+		//set the label opaque
+		displayLabel.setOpaque(true);
+		
+		//Set the alignment of the display text
+		displayLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		//Choose the text color
+		displayLabel.setForeground(Color.white);
+		
+		//Choose the font size and type
+		displayLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		jf.add(displayLabel);
+		
+		
+		//add/create buttons
+	
+		JButton sevenButton = new JButton("7");
+		sevenButton.setBounds(30,130,80,80);
+		// Change to desired font size
+		sevenButton.setFont(sevenButton.getFont().deriveFont(Font.BOLD, 60));
+		// set button color
+		sevenButton.setBackground(Color.GRAY);
+		sevenButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+		sevenButton.addActionListener(this);
+		jf.add(sevenButton);
+		
+		JButton eightButton = new JButton("8");
+		eightButton.setBounds(130,130,80,80);
+		eightButton.setFont(sevenButton.getFont().deriveFont(Font.BOLD, 60));
+		eightButton.setBackground(Color.GRAY);
+		eightButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+		eightButton.addActionListener(this);
+		jf.add(eightButton);
+		
+		
+		
+	}
+ //Create the Main  class to call the calculator constructor 
+	
+	public static void main(String[]arg) {
+		 
+		new Calculator();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		jf.getContentPane().setBackground(Color.PINK);
+		
+	}
+		
+	}

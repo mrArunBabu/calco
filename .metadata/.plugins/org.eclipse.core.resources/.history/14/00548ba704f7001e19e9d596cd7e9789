@@ -1,0 +1,52 @@
+import javax.swing.SwingConstants;
+
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+
+public class Calculator {
+	// Create method calculator
+	public Calculator() {
+		JFrame jf = new JFrame("Calculator");
+		
+		// set size of the window and the location on screen
+		jf.setLayout(null);
+		jf.setSize(500, 600);
+		jf.setLocation(200, 100);
+		
+		
+		//Make it visible
+		jf.setVisible(true);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//Create display
+		
+		JLabel displayLabel = new JLabel("Hello");
+		
+		// Add dimensions and location on screen to label 
+		displayLabel.setBounds(30, 50, 540, 40);
+		
+		//Choose display background color
+		displayLabel.setBackground(Color.gray);
+		
+		//set the label opaque
+		displayLabel.setOpaque(true);
+		
+		//Set the alignment of the display text
+		displayLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		//Choose the text color
+		displayLabel.setForeground(Color.white);
+		
+		jf.add(displayLabel);
+	}
+ //Create the Main  class to call the calculator constructor 
+	
+	public static void main(String[]arg) {
+		 
+		new Calculator();
+	}
+		
+	}

@@ -1,0 +1,186 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class Check extends JFrame implements ActionListener, KeyListener {
+
+    private JLabel displayLabel;
+    private StringBuilder currentInput;
+
+    public Check() {
+        setTitle("Basic Calculator");
+        setSize(300, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        currentInput = new StringBuilder();
+
+        displayLabel = new JLabel("0", JLabel.RIGHT);
+        displayLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        add(displayLabel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 4));
+        String[] buttonLabels = {
+                "7", "8", "9", "/",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-",
+                "0", ".", "=", "+"
+        };
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            button.addActionListener(this);
+            buttonPanel.add(button);
+        }
+
+        JButton clearButton = new JButton("C");
+        clearButton.addActionListener(this);
+        buttonPanel.add(clearButton);
+
+        JButton backButton = new JButton("<--");
+        backButton.addActionListener(this);
+        buttonPanel.add(backButton);
+
+        add(buttonPanel);
+
+        addKeyListener(this);
+        setFocusable(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command) {
+            case "=":
+                evaluate();
+                break;
+            case "C":
+                clear();
+                break;
+            case "<--":
+                backspace();
+                break;
+            default:
+                currentInput.append(command);
+                displayLabel.setText(currentInput.toString());
+                break;
+        }
+    }
+
+    private void evaluate() {
+        try {
+            double result = evaluateExpression(currentInput.toString());
+            displayLabel.setText(Double.toString(result));
+            currentInput.setLength(0);
+            currentInput.append(result);
+        } catch (ArithmeticException | NumberFormatException ex) {
+            displayLabel.setText("Error");
+        }
+    }
+
+    private void clear() {
+        currentInput.setLength(0);
+        displayLabel.setText("0");
+    }
+
+    private void backspace() {
+        if (currentInput.length() > 0) {
+            currentInput.deleteCharAt(currentInput.length() - 1);
+            displayLabel.setText(currentInput.toString());
+        }
+    }
+
+    private double evaluateExpression(String expression) {
+        return new Object() {
+            int pos = -1, ch;
+
+            void nextChar() {
+                ch = (++pos < expression.length()) ? expression.charAt(pos) : -1;
+            }
+
+            boolean eat(int charToEat) {
+                while (ch == ' ') nextChar();
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
+                return false;
+            }
+
+            double parse() {
+                nextChar();
+                double x = parseExpression();
+                if (pos < expression.length()) throw new RuntimeException("Unexpected: " + (char) ch);
+                return x;
+            }
+
+            double parseExpression() {
+                double x = parseTerm();
+                for (; ; ) {
+                    if (eat('+')) x += parseTerm();
+                    else if (eat('-')) x -= parseTerm();
+                    else return x;
+                }
+            }
+
+            double parseTerm() {
+                double x = parseFactor();
+                for (; ; ) {
+                    if (eat('*')) x *= parseFactor();
+                    else if (eat('/')) x /= parseFactor();
+                    else return x;
+                }
+            }
+
+            double parseFactor() {
+                if (eat('+')) return parseFactor();
+                if (eat('-')) return -parseFactor();
+
+                double x;
+                int startPos = this.pos;
+                if (eat('(')) {
+                    x = parseExpression();
+                    eat(')');
+                } else if ((ch >= '0' && ch <= '9') || ch == '.') {
+                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+                    x = Double.parseDouble(expression.substring(startPos, this.pos));
+                } else {
+                    throw new RuntimeException("Unexpected: " + (char) ch);
+                }
+
+                return x;
+            }
+        }.parse();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        if ((c >= '0' && c <= '9') || c == '.' || c == '+' || c == '-' || c == '*' || c == '/' || c == '=') {
+            currentInput.append(c);
+            displayLabel.setText(currentInput.toString());
+        } else if (c == KeyEvent.VK_BACK_SPACE) {
+            backspace();
+        } else if (c == KeyEvent.VK_ENTER) {
+            evaluate();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // Not used
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Not used
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Check calculator = new Check();
+            calculator.setVisible(true);
+        });
+    }
+}
